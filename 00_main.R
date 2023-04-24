@@ -16,4 +16,5 @@ estados <- unique(
     datasus_faixa_etaria$nome_uf[!is.na(datasus_faixa_etaria$nome_uf)]
 )
 
-map(estados, arrange_faixa_etaria)
+obitos_idade_ufs <- map(estados, arrange_faixa_etaria)
+obitos_idade_br <- arrange_faixa_etaria(br = TRUE)

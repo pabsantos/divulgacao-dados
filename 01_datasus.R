@@ -21,9 +21,14 @@ calc_faixa_etaria <- function() {
         )
 }
 
-arrange_faixa_etaria <- function(uf) {
+arrange_faixa_etaria <- function(uf, br = FALSE) {
+    
+    if (br == FALSE) {
+        datasus_faixa_etaria <- datasus_faixa_etaria |> filter(nome_uf == uf)
+    } 
+    
     datasus_faixa_etaria |> 
-        filter(year(data_ocorrencia) %in% c(2019, 2020), nome_uf == uf) |> 
+        filter(year(data_ocorrencia) %in% c(2019, 2020)) |> 
         count(faixa_etaria, ano = year(data_ocorrencia)) |> 
         pivot_wider(
             names_from = ano,
