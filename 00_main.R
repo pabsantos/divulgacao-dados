@@ -20,3 +20,8 @@ obitos_idade_ufs <- map(estados, arrange_faixa_etaria)
 obitos_idade_br <- arrange_faixa_etaria(br = TRUE)
 
 obitos_sexo_ufs <- arrange_obitos_sexo()
+
+obitos_piramide_etaria_br <- arrange_piramide_etaria()
+obitos_piramide_etaria_uf <- map(estados, arrange_piramide_etaria)
+
+

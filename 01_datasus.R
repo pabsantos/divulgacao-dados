@@ -65,3 +65,16 @@ arrange_obitos_sexo <- function(uf) {
             variacao_fem = scales::percent(variacao_fem, accuracy = 0.1)
         )
 }
+
+arrange_piramide_etaria <- function(uf = "all") {
+    if (!uf == "all") {
+        datasus_faixa_etaria <- datasus_faixa_etaria |> filter(nome_uf == uf)
+    }
+    
+    datasus_faixa_etaria |> 
+        filter(year(data_ocorrencia) == 2020) |> 
+        count(sexo_vitima, faixa_etaria) |> 
+        drop_na() |> 
+        pivot_wider(names_from = sexo_vitima, values_from = n, values_fill = 0) |> 
+        arrange(desc(faixa_etaria))
+}
