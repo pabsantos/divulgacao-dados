@@ -44,35 +44,24 @@ arrange_faixa_etaria <- function(uf, br = FALSE) {
         arrange(desc(faixa_etaria))
 }
 
-calc_piramide_etaria <- function(uf) {
+arrange_obitos_sexo <- function(uf) {
     datasus_faixa_etaria |> 
-        filter(
-            year(data_ocorrencia) %in% c(2019, 2020),
-            nome_uf == uf
-        ) |> 
-        count(ano = year(data_ocorrencia), faixa_etaria, sexo_vitima) |> 
-        # drop_na() |> 
+        filter(year(data_ocorrencia) %in% c(2019, 2020)) |> 
+        count(nome_regiao, nome_uf, ano = year(data_ocorrencia), sexo_vitima) |> 
         pivot_wider(
             names_from = c(sexo_vitima, ano),
             values_from = n,
             names_sep = "_",
             values_fill = 0
         ) |> 
+        select(!starts_with("NA")) |> 
+        arrange(nome_regiao) |> 
+        drop_na() |> 
         clean_names() |> 
         mutate(
-            total_2019 = feminino_2019 + masculino_2019,
-            total_2020 = feminino_2020 + masculino_2020,
-            delta_masc = (masculino_2020 - masculino_2019) / masculino_2019,
-            delta_fem = (feminino_2020 - feminino_2019) / feminino_2019,
-            delta_total = (total_2020 - total_2019) / total_2019,
-            delta_masc = scales::percent(delta_masc, accuracy = 0.1),
-            delta_fem = scales::percent(delta_fem, accuracy = 0.1),
-            delta_total = scales::percent(delta_total, accuracy = 0.1)
-        ) |> 
-        arrange(desc(faixa_etaria)) |> 
-        select(
-            faixa_etaria, masculino = masculino_2020,
-            feminino = feminino_2020, total = total_2020,
-            delta_masc, delta_fem, delta_total
+            variacao_masc = (masculino_2020 - masculino_2019) / masculino_2019,
+            variacao_fem = (feminino_2020 - feminino_2019) / feminino_2019,
+            variacao_masc = scales::percent(variacao_masc, accuracy = 0.1),
+            variacao_fem = scales::percent(variacao_fem, accuracy = 0.1)
         )
 }

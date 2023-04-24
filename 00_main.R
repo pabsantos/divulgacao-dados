@@ -18,3 +18,5 @@ estados <- unique(
 
 obitos_idade_ufs <- map(estados, arrange_faixa_etaria)
 obitos_idade_br <- arrange_faixa_etaria(br = TRUE)
+
+obitos_sexo_ufs <- arrange_obitos_sexo()
